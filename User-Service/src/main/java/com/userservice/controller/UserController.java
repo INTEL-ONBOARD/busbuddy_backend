@@ -2,6 +2,7 @@ package com.userservice.controller;
 
 import com.userservice.model.ApiResponse;
 import com.userservice.model.User;
+import com.userservice.model.UserCredentialsDTO;
 import com.userservice.model.UserDTO;
 
 import com.userservice.service.UserService;
@@ -46,4 +47,48 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        try {
+            User updatedUser = userService.updateUser(id, userDTO);
+            ApiResponse response = new ApiResponse("User updated successfully", true, updatedUser);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("User update failed: " + e.getMessage(), false, null);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long id) {
+        try {
+            userService.deleteUser(id);
+            ApiResponse response = new ApiResponse("User deleted successfully", true, null);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("User deletion failed: " + e.getMessage(), false, null);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<ApiResponse> checkUserCredentials(@RequestBody UserCredentialsDTO credentialsDTO) {
+        try {
+            // Use the service method to check if email and password are correct
+            User user = userService.findByEmailAndCheckPassword(credentialsDTO.getEmail(), credentialsDTO.getPassword());
+
+            if (user != null) {
+                ApiResponse response = new ApiResponse("User exists", true, user);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                ApiResponse response = new ApiResponse("Invalid email or password", false, null);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse("Error: " + e.getMessage(), false, null);
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }
