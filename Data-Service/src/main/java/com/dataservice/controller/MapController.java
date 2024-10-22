@@ -1,6 +1,5 @@
 package com.dataservice.controller;
 
-
 import com.dataservice.model.Map;
 import com.dataservice.service.MapService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +30,23 @@ public class MapController {
     @PostMapping
     public Map createMap(@RequestBody Map map) {
         return mapService.saveMap(map);
+    }
+
+    // Add the PUT mapping to update an existing Map
+    @PutMapping("/{id}")
+    public ResponseEntity<Map> updateMap(@PathVariable Long id, @RequestBody Map updatedMap) {
+        return mapService.getMapById(id)
+                .map(existingMap -> {
+                    // Update the properties of the existing map with the new data
+                    existingMap.setMilestone(updatedMap.getMilestone());
+                    existingMap.setInfo(updatedMap.getInfo());
+                    existingMap.setSchemaMap(updatedMap.getSchemaMap());
+
+                    // Save the updated map
+                    Map savedMap = mapService.saveMap(existingMap);
+                    return ResponseEntity.ok(savedMap);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
