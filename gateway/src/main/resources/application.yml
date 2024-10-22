@@ -1,0 +1,37 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Route to User-Service
+        - id: user-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/users/**
+
+        # Route to Data-Service
+        - id: data-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/data/**
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173" # Allow frontend React app to access services
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+            allowedHeaders: "*"
+            allowCredentials: true
+
+# Enable actuator to monitor and manage the service (optional)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
