@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/schemas")
+@CrossOrigin("http://localhost:5173")
 public class SchemaController {
 
     @Autowired
