@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("http://localhost:5174")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

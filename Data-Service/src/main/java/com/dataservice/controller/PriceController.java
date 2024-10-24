@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/prices")
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("http://localhost:5174")
 public class PriceController {
 
     @Autowired
