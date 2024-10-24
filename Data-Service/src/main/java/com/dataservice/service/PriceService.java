@@ -28,4 +28,7 @@ public class PriceService {
     public void deletePrice(Long id) {
         priceRepository.deleteById(id);
     }
+    public Optional<Price> findByMilestone(String milestone) {
+        return priceRepository.findByMilestone(milestone);
+    }
 }

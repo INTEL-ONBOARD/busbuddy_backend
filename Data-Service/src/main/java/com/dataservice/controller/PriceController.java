@@ -55,4 +55,11 @@ public class PriceController {
         priceService.deletePrice(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/milestone")
+    public ResponseEntity<Price> getPriceByMilestone(@RequestParam String milestone) {
+        return priceService.findByMilestone(milestone)
+                .map(price -> ResponseEntity.ok(price))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
